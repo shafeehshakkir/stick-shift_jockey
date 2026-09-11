@@ -189,6 +189,7 @@ const bindUi = () => {
   ui.debugThrottleIndex = qs("debug-throttle-index")
   ui.debugThrottleRange = qs("debug-throttle-range")
   ui.debugThrottleApply = qs("debug-throttle-apply")
+  ui.presetSelect = qs("preset-audio-select")
 }
 
 const fmt3 = (value) => Number(value || 0).toFixed(3)
@@ -321,6 +322,29 @@ const handleUpload = (event) => {
   const name = audio.loadTrackFile(file)
   ui.trackName.textContent = name.toUpperCase()
   setHint("Tape loaded · mash A (or Space) to crank the starter")
+}
+
+const loadPresetTrack = async (url) => {
+  if (!url) {
+    return
+  }
+  try {
+    const encodedUrl = encodeURI(url)
+    const response = await fetch(encodedUrl)
+    if (!response.ok) {
+      console.warn("[stick-shift] failed to fetch preset track:", url)
+      return
+    }
+    const blob = await response.blob()
+    const rawFileName = url.split("/").pop() || "track.mp3"
+    const fileName = decodeURIComponent(rawFileName)
+    const file = new File([blob], fileName, { type: blob.type || "audio/mpeg" })
+    const name = audio.loadTrackFile(file)
+    ui.trackName.textContent = name.toUpperCase()
+    setHint("Tape loaded · mash A (or Space) to crank the starter")
+  } catch (error) {
+    console.error("[stick-shift] error loading preset track:", error)
+  }
 }
 
 const handleRadioToggle = async () => {
@@ -873,6 +897,14 @@ const boot = () => {
   syncDebugFormFromHardware()
 
   ui.upload.addEventListener("change", handleUpload)
+  if (ui.presetSelect) {
+    ui.presetSelect.addEventListener("change", (event) => {
+      loadPresetTrack(event.target.value)
+    })
+    if (ui.presetSelect.value) {
+      loadPresetTrack(ui.presetSelect.value)
+    }
+  }
   ui.toggle.addEventListener("click", handleRadioToggle)
   ui.toggle.addEventListener("keydown", (event) => {
     if (event.code === "Enter") {
