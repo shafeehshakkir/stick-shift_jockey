@@ -87,9 +87,10 @@ flowchart LR
 
 ### Project Demo
 # Video
-
-](https://drive.google.com/file/d/1srtDDI3dVz-bUKtkfAjVLRkaLJJyfjDz/view?usp=sharing)
-basic guide of how to use it a controller/gamepad is recommended
+https://drive.google.com/file/d/1KkQF6h8XDC-84ae_aIV7P-T_7bfImH3w/view?usp=sharing
+how the external controller/gamepad works
+(https://drive.google.com/file/d/1srtDDI3dVz-bUKtkfAjVLRkaLJJyfjDz/view?usp=sharing)
+basic guide of the UI
 
 
 ---
